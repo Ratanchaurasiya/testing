@@ -14,7 +14,7 @@ const Fees = () => {
     try {
       const token = localStorage.getItem('token');
       const config = token ? { headers: { Authorization: `Bearer ${token}` } } : {};
-      const res = await axios.get('http://localhost:5000/api/fees', config);
+      const res = await axios.get('https://testing-backend-8k3h.onrender.com/api/fees', config);
       if (res.data.status === 'success') {
         setFees(res.data.data);
       }
@@ -50,7 +50,7 @@ const Fees = () => {
     try {
       const token = localStorage.getItem('token');
       const config = token ? { headers: { Authorization: `Bearer ${token}` } } : {};
-      await axios.put(`http://localhost:5000/api/fees/${feeId}`, {
+      await axios.put(`https://testing-backend-8k3h.onrender.com/api/fees/${feeId}`, {
         amount_paid: newAmount,
         payment_status: Number(newAmount) >= 5000 ? 'Paid' : 'Partial'
       }, config);

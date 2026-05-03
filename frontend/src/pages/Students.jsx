@@ -27,7 +27,7 @@ const Students = () => {
     try {
       const token = localStorage.getItem('token');
       const config = token ? { headers: { Authorization: `Bearer ${token}` } } : {};
-      const response = await axios.get('http://localhost:5000/api/students', config);
+      const response = await axios.get('https://testing-backend-8k3h.onrender.com/api/students', config);
       if (response.data.status === 'success') {
         setStudents(response.data.data);
       }
@@ -43,7 +43,7 @@ const Students = () => {
     try {
       const token = localStorage.getItem('token');
       const config = token ? { headers: { Authorization: `Bearer ${token}` } } : {};
-      const res = await axios.post('http://localhost:5000/api/students', formData, config);
+      const res = await axios.post('https://testing-backend-8k3h.onrender.com/api/students', formData, config);
       if (res.data.status === 'success') {
         setShowModal(false);
         setFormData({ first_name: '', last_name: '', email: '', phone: '', student_roll_no: '', dob: '', gender: 'Male', address: '', city: '', state: '', pincode: '' });

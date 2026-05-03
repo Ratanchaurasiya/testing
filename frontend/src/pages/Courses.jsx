@@ -14,10 +14,11 @@ const Courses = () => {
     try {
       const token = localStorage.getItem('token');
       const config = token ? { headers: { Authorization: `Bearer ${token}` } } : {};
-      const res = await axios.get('http://localhost:5000/api/courses', config);
+      const res = await axios.get('https://testing-backend-8k3h.onrender.com/api/courses', config);
       if (res.data.status === 'success') {
         setCourses(res.data.data);
       }
+     
     } catch (err) {
       console.error('Error fetching courses', err);
       // Fallback

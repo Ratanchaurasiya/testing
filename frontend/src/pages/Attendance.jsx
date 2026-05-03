@@ -23,7 +23,7 @@ const Attendance = () => {
     try {
       const token = localStorage.getItem('token');
       const config = token ? { headers: { Authorization: `Bearer ${token}` } } : {};
-      const res = await axios.get('http://localhost:5000/api/courses', config);
+      const res = await axios.get('https://testing-backend-8k3h.onrender.com/api/attendance/courses', config);
       if (res.data.status === 'success') {
         setCourses(res.data.data);
         if (res.data.data.length > 0) {
@@ -45,7 +45,7 @@ const Attendance = () => {
     try {
       const token = localStorage.getItem('token');
       const config = token ? { headers: { Authorization: `Bearer ${token}` } } : {};
-      const res = await axios.get(`http://localhost:5000/api/attendance?course_id=${selectedCourse}&date=${attendanceDate}`, config);
+      const res = await axios.get(`https://testing-backend-8k3h.onrender.com/api/attendance?course_id=${selectedCourse}&date=${attendanceDate}`, config);
       if (res.data.status === 'success') {
         setStudents(res.data.data);
       }

@@ -20,8 +20,8 @@ const Marks = () => {
       const config = token ? { headers: { Authorization: `Bearer ${token}` } } : {};
       
       const [stuRes, courseRes] = await Promise.all([
-        axios.get('http://localhost:5000/api/students', config),
-        axios.get('http://localhost:5000/api/courses', config)
+        axios.get('https://testing-backend-8k3h.onrender.com', config),
+        axios.get('https://testing-backend-8k3h.onrender.com/api/courses', config)
       ]);
       
       setStudents(stuRes.data.data);
@@ -40,14 +40,14 @@ const Marks = () => {
       
       // Save each mark entry
       const promises = Object.entries(marks).map(([course_id, score]) => {
-        return axios.post('http://localhost:5000/api/marks', {
+        return axios.post('https://testing-backend-8k3h.onrender.com/api/marks', {
           student_id: selectedStudent,
           course_id,
           marks_obtained: score,
           semester
         }, config);
       });
-      
+    
       await Promise.all(promises);
       setMessage('Marks saved successfully!');
       setTimeout(() => setMessage(''), 3000);
