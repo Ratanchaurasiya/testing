@@ -1,8 +1,44 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+import { downloadCSV } from '../../utils/downloadHelper';
 
 const StudentCertificates = () => {
   const [requestType, setRequestType] = useState('Marksheet');
   const [message, setMessage] = useState('');
+  const [results, setResults] = useState([]);
+
+  useEffect(() => {
+    fetchMyResults();
+  }, []);
+
+  const fetchMyResults = async () => {
+    try {
+      const user = JSON.parse(localStorage.getItem('user') || '{}');
+      const token = localStorage.getItem('token');
+      const config = token ? { headers: { Authorization: `Bearer ${token}` } } : {};
+      const res = await axios.get(`http://localhost:5000/api/marks?student_id=${user.id}`, config);
+      if (res.data.status === 'success') {
+        setResults(res.data.data);
+      }
+    } catch (err) {
+      console.error('Failed to fetch results', err);
+    }
+  };
+
+  const handleDownloadMarksheet = () => {
+    if (results.length === 0) return alert('No marks recorded yet.');
+    downloadCSV(results, 'My_Marksheet_Fall_2024');
+  };
+
+  const handleDownloadCertificate = () => {
+    const certData = [{
+       Certificate: 'Bonafide Certificate',
+       Issued_To: JSON.parse(localStorage.getItem('user') || '{}').username,
+       Status: 'Verified',
+       Date: new Date().toLocaleDateString()
+    }];
+    downloadCSV(certData, 'My_Certificate');
+  };
 
   const handleRequest = (e) => {
     e.preventDefault();
@@ -60,13 +96,13 @@ const StudentCertificates = () => {
                   <td>Semester 1 Marksheet</td>
                   <td>Jan 15, 2024</td>
                   <td><span className="status-badge status-active">Ready</span></td>
-                  <td><button className="btn btn-success" style={{ padding: '0.25rem 0.5rem' }}>Download</button></td>
+                  <td><button className="btn btn-success" style={{ padding: '0.25rem 0.5rem' }} onClick={handleDownloadMarksheet}>Download</button></td>
                 </tr>
                 <tr>
                   <td>Bonafide Certificate</td>
                   <td>Oct 20, 2024</td>
                   <td><span className="status-badge status-pending">Processing</span></td>
-                  <td>-</td>
+                  <td><button className="btn" style={{ padding: '0.25rem 0.5rem' }} onClick={handleDownloadCertificate}>Preview</button></td>
                 </tr>
               </tbody>
             </table>

@@ -13,6 +13,12 @@ const Attendance = () => {
     fetchCourses();
   }, []);
 
+  useEffect(() => {
+    if (selectedCourse) {
+      fetchAttendance();
+    }
+  }, [selectedCourse, attendanceDate]);
+
   const fetchCourses = async () => {
     try {
       const token = localStorage.getItem('token');

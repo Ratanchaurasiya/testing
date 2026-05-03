@@ -7,6 +7,7 @@ const auth = require('../middleware/auth');
 router.use(auth);
 
 router.get('/', studentController.getAllStudents);
+router.post('/', studentController.createStudent);
 router.get('/:id', studentController.getStudentById);
 router.post('/', studentController.createStudent);
 router.put('/:id', studentController.updateStudent);

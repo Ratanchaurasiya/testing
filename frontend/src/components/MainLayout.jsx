@@ -29,8 +29,13 @@ const Sidebar = () => {
           </Link>
         </li>
         <li>
+          <Link to="/marks" className="nav-item">
+            <span className="nav-icon">📊</span> Student Marks
+          </Link>
+        </li>
+        <li>
           <Link to="/fees" className="nav-item">
-            <span className="nav-icon">💰</span> Fees
+            <span className="nav-icon">💰</span> Fees Management
           </Link>
         </li>
       </ul>

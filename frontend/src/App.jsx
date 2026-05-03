@@ -5,8 +5,12 @@ import Dashboard from './pages/Dashboard';
 import Login from './pages/Login';
 import Students from './pages/Students';
 import Attendance from './pages/Attendance';
+import Courses from './pages/Courses';
+import Fees from './pages/Fees';
+import Marks from './pages/Marks';
 import StudentDashboard from './pages/student/StudentDashboard';
 import StudentCertificates from './pages/student/StudentCertificates';
+import StudentProfile from './pages/student/StudentProfile';
 
 const ProtectedRoute = ({ children, allowedRole }) => {
   const token = localStorage.getItem('token');
@@ -16,9 +20,7 @@ const ProtectedRoute = ({ children, allowedRole }) => {
     return <Navigate to="/login" replace />;
   }
 
-  // Simplified role check (in a real app, robust check needed)
   if (allowedRole && user.role !== allowedRole) {
-    // Redirect to appropriate dashboard based on actual role
     return <Navigate to={user.role === 'Student' ? '/student/dashboard' : '/dashboard'} replace />;
   }
 
@@ -36,9 +38,10 @@ const App = () => {
           <Route path="/" element={<Navigate to="/dashboard" replace />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/students" element={<Students />} />
-          <Route path="/courses" element={<div><div className="page-header"><h1 className="page-title">Courses Management</h1></div><div className="card">Courses List Placeholder</div></div>} />
+          <Route path="/courses" element={<Courses />} />
           <Route path="/attendance" element={<Attendance />} />
-          <Route path="/fees" element={<div><div className="page-header"><h1 className="page-title">Fee Management</h1></div><div className="card">Fees Placeholder</div></div>} />
+          <Route path="/fees" element={<Fees />} />
+          <Route path="/marks" element={<Marks />} />
         </Route>
 
         {/* Student Routes */}
@@ -46,7 +49,7 @@ const App = () => {
           <Route path="/student" element={<Navigate to="/student/dashboard" replace />} />
           <Route path="/student/dashboard" element={<StudentDashboard />} />
           <Route path="/student/certificates" element={<StudentCertificates />} />
-          <Route path="/student/profile" element={<div><div className="page-header"><h1 className="page-title">My Profile</h1></div><div className="card">Profile details will appear here.</div></div>} />
+          <Route path="/student/profile" element={<StudentProfile />} />
         </Route>
       </Routes>
     </Router>

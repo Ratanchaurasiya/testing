@@ -4,8 +4,7 @@ const pool = require('../config/database');
 exports.getAllStudents = async (req, res) => {
   try {
     const [rows] = await pool.query(`
-      SELECT student_id, student_roll_no, first_name, last_name, email, phone, status, enrollment_date 
-      FROM Students 
+      SELECT * FROM Students 
       ORDER BY student_id DESC
     `);
     res.status(200).json({ status: 'success', data: rows });
@@ -15,7 +14,7 @@ exports.getAllStudents = async (req, res) => {
   }
 };
 
-// Get student by ID
+// Get student by ID (Profile view)
 exports.getStudentById = async (req, res) => {
   try {
     const [rows] = await pool.query('SELECT * FROM Students WHERE student_id = ?', [req.params.id]);
@@ -29,24 +28,23 @@ exports.getStudentById = async (req, res) => {
   }
 };
 
-// Create a new student (using stored procedure)
+// Create a new student (Full Details)
 exports.createStudent = async (req, res) => {
+  const { first_name, last_name, email, phone, student_roll_no, dob, gender, address, city, state, pincode } = req.body;
   try {
-    const { first_name, last_name, dob, gender, email, phone, address, city, state, pincode, blood_group, aadhar } = req.body;
-    
-    // Using the AddNewStudent stored procedure created in the schema
-    await pool.query(
-      'CALL AddNewStudent(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-      [first_name, last_name, dob, gender, email, phone, address, city, state, pincode, blood_group, aadhar]
+    const [result] = await pool.query(
+      `INSERT INTO Students 
+       (first_name, last_name, email, phone, student_roll_no, dob, gender, address, city, state, pincode) 
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      [first_name, last_name, email, phone, student_roll_no, dob, gender, address, city, state, pincode]
     );
-    
-    res.status(201).json({ status: 'success', message: 'Student created successfully' });
+    res.status(201).json({ 
+      status: 'success', 
+      message: 'Student created successfully',
+      student_id: result.insertId 
+    });
   } catch (error) {
     console.error('Error creating student:', error);
-    // Handle specific SQL errors (like duplicate email)
-    if (error.sqlState === '45000') {
-      return res.status(400).json({ status: 'error', message: error.message });
-    }
     res.status(500).json({ status: 'error', message: 'Failed to create student' });
   }
 };
@@ -55,13 +53,13 @@ exports.createStudent = async (req, res) => {
 exports.updateStudent = async (req, res) => {
   try {
     const studentId = req.params.id;
-    const { first_name, last_name, gender, phone, address, city, state, pincode, status } = req.body;
+    const { first_name, last_name, phone, dob, gender, address, city, state, pincode, status } = req.body;
     
     await pool.query(
       `UPDATE Students 
-       SET first_name=?, last_name=?, gender=?, phone=?, address=?, city=?, state=?, pincode=?, status=? 
+       SET first_name=?, last_name=?, phone=?, dob=?, gender=?, address=?, city=?, state=?, pincode=?, status=? 
        WHERE student_id=?`,
-      [first_name, last_name, gender, phone, address, city, state, pincode, status, studentId]
+      [first_name, last_name, phone, dob, gender, address, city, state, pincode, status, studentId]
     );
     
     res.status(200).json({ status: 'success', message: 'Student updated successfully' });

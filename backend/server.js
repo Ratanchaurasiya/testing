@@ -14,11 +14,15 @@ const authRoutes = require('./routes/authRoutes');
 const studentRoutes = require('./routes/studentRoutes');
 const attendanceRoutes = require('./routes/attendanceRoutes');
 const courseRoutes = require('./routes/courseRoutes');
+const feeRoutes = require('./routes/feeRoutes');
+const markRoutes = require('./routes/markRoutes');
 
 app.use('/api/auth', authRoutes);
 app.use('/api/students', studentRoutes);
 app.use('/api/attendance', attendanceRoutes);
 app.use('/api/courses', courseRoutes);
+app.use('/api/fees', feeRoutes);
+app.use('/api/marks', markRoutes);
 
 app.get('/api/health', (req, res) => {
   res.status(200).json({ status: 'success', message: 'API is running' });
